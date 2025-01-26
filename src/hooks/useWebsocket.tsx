@@ -6,14 +6,17 @@ interface useWebsocketProviderValues {
   counter: number | undefined;
   increment: () => void;
   reset: () => void;
+
+  roomName: string;
 }
 
 const WebsocketContext = createContext<useWebsocketProviderValues | null>(null);
 
 export const WebsocketContextProvider = ({
   room,
+
   children,
-}: React.PropsWithChildren<{ room: string }>) => {
+}: React.PropsWithChildren<{ room: string; nickname: string }>) => {
   const [counter, setCounter] = useState<number>();
 
   const [wsProvider, setWsProvider] = useState<WebsocketProvider | null>(null);
@@ -56,7 +59,12 @@ export const WebsocketContextProvider = ({
     }
   };
 
-  const value = { counter, increment, reset };
+  const value: useWebsocketProviderValues = {
+    counter,
+    increment,
+    reset,
+    roomName: room,
+  };
   return (
     <WebsocketContext.Provider value={value}>
       {children}
